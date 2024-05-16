@@ -5,7 +5,6 @@ from pathlib import Path
 
 
 filepaths = glob.glob("invoices/*.xlsx")
-table_width = [30, 70, 30, 30, 30]
 
 for filepath in filepaths:
     pdf = FPDF(orientation="L", unit="mm", format="A4")
@@ -41,5 +40,23 @@ for filepath in filepaths:
         pdf.cell(w=40, h=16, txt=str(row["amount_purchased"]), border=1)
         pdf.cell(w=30, h=16, txt=str(row["price_per_unit"]), border=1)
         pdf.cell(w=30, h=16, txt=str(row["total_price"]), border=1, ln=1)
+
+    total_price = df["total_price"].sum()
+
+    pdf.set_font(family="Times", size=16)
+    pdf.cell(w=30, h=16, txt="", border=1)
+    pdf.cell(w=70, h=16, txt="", border=1)
+    pdf.cell(w=40, h=16, txt="", border=1)
+    pdf.cell(w=30, h=16, txt="", border=1)
+    pdf.cell(w=30, h=16, txt=str(total_price), border=1, ln=1)
+    pdf.ln(20)
+
+    pdf.set_font(family="Times", size=16, style="B")
+    pdf.cell(w=30, h=16, txt=f"Total price is: {total_price}", ln=1)
+
+    pdf.set_font(family="Times", size=16, style="B")
+    pdf.cell(w=45, h=16, txt="Amazon Shopping")
+
+    pdf.image("logo.png", w=18, h=18)
 
     pdf.output(f"PDFs/{filename}.pdf")
